@@ -2,14 +2,19 @@
 
 namespace AnimeInfo.Controllers
 {
-    public class Blog : Controller
+    public class BlogController : Controller
     {
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Links()
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        public IActionResult TopPosts()
         {
             return View();
         }

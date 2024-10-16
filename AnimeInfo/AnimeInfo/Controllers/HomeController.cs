@@ -18,11 +18,6 @@ namespace AnimeInfo.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         public  IActionResult Overview() 
         { 
             return View();
