@@ -2,13 +2,25 @@
     ViewData["Title"] = "Top Posts";
 }
 
-
-<div class="row">
-    <div class="col-md-8">
-        <h2>Top Posts</h2>
-        <ul class="list-unstyled">
-            <li><a href="#">Top Post 1</a></li>
-            <li><a href="#">Top Post 2</a></li>
-            <li><a href="#">Top Post 3</a></li>
-        </ul>
+<div class="container-fluid">
+    <h1 class="text-center mb-4">Top Posts</h1>
+    <p class="text-center">A page dedicated to top blog posts</p>
+    <div class="row">
+        <div class="col-md-3">
+            <h2>Menu</h2>
+            <ul class="list-unstyled">
+                <li><a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="Index">Blog</a></li>
+                <li><a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="TopPosts">Top Posts</a></li>
+                <li><a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="About">About</a></li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <h2 class="mb-3">Top Posts</h2>
+            <ul class="list-unstyled">
+                <li> <a href="#">Top Post 1</a></li>
+                <li><a href="#">Top Post 2</a></li>
+                <li><a href="#">Top Post 3</a></li>
+            </ul>
+        </div>
     </div>
+</div>

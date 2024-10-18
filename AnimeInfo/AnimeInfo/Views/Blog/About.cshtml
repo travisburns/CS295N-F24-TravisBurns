@@ -2,9 +2,23 @@
     ViewData["Title"] = "About";
 }
 
-<div class="">
-    <h2>About the Author</h2>
-    <p>
-        Author Description.
-    </p>
+<div class="container-fluid">
+    <h1 class="text-center mb-4">About</h1>
+    <p class="text-center">A page about the author</p>
+    <div class="row">
+        <div class="col-md-3">
+            <h2>Menu</h2>
+            <ul class="list-unstyled">
+                <li><a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="Index">Return To Blog</a></li>
+                <li><a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="TopPosts">Top Posts</a></li>
+                <li><a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="About">About</a></li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <h2 class="mb-3">About the Author</h2>
+            <p>
+                Author Description.
+            </p>
+        </div>
+    </div>
 </div>

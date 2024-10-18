@@ -1,10 +1,21 @@
 ﻿@{
     ViewData["Title"] = "Overview";
-} 
+}
 
-
-<div class = "text-center">
-    <h1 class="display-4"> Welcome to the AnimeInfo Site</h1>
+<div class="container-fluid">
+    <h1 class="text-center mb-4">Welcome to the AnimeInfo Site</h1>
+    <p class="text-center">Coming Soon, a list of anime's</p>
+    <div class="row">
+        <div class="col-md-3">
+            <h2>Menu</h2>
+            <ul class="list-unstyled">
+                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Return Home</a></li>
+                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Overview">Overview</a></li>
+                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="References">References</a></li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <!-- Add content here if needed -->
+        </div>
     </div>
-
-    <p>Coming Soon, a list of anime's'</p>
+</div>
