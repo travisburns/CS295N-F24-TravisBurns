@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AnimeInfo.Models;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace AnimeInfo.Controllers
 {
@@ -6,6 +8,9 @@ namespace AnimeInfo.Controllers
     {
         public IActionResult Index()
         {
+            //TODO: get the blog objects and put them into a list. 
+            List<Blog> blogs;
+
             return View();
         }
 
@@ -15,6 +20,11 @@ namespace AnimeInfo.Controllers
         }
 
         public IActionResult TopPosts()
+        {
+            return View();
+        }
+
+        public IActionResult Blogs()
         {
             return View();
         }
