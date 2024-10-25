@@ -1,21 +1,22 @@
-﻿@{
-    ViewData["Title"] = "Reviews Page";
+﻿@model Blog
+@{
+    ViewData["Title"] = "Blog";
 }
 
 
 <form method="post">
 
     <label for="title">Title</label>
-    <input id="title" name="Book.Title" /> <br />
+    <input id="title" name="BlogTitle" /> <br />
 
     <label for="author">Author</label>
-    <input id="author" name="Book.Author" /> <br />
+    <input id="author" name="BlogAuthor" /> <br />
 
     <label for="reviewer">Reviewer</label>
-    <input id="reviewer" name="Reviewer.Name" /> <br />
+    <input id="reviewer" name="BlogName" /> <br />
 
     <label for="title">Review</label>
-    <input id="text" name="ReviewText" /> <br />
+    <input id="text" name="BlogText" /> <br />
 
     <button type="submit">Submit</button>
 
