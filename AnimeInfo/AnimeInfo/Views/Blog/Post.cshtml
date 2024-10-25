@@ -1,0 +1,34 @@
+﻿@model Blog
+@{
+    ViewData["Title"] = "New Blog Post";
+}
+
+<div class="container-fluid">
+    <h1 class="text-center mb-4">Create New Blog Post</h1>
+    
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="BlogTitle">Title</label>
+            <input asp-for="BlogTitle" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="BlogText">Post Content</label>
+            <textarea asp-for="BlogText" class="form-control" rows="5" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="BlogAuthor.Name">Author Name</label>
+            <input asp-for="BlogAuthor.Name" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="BlogRating">Rating (1-5)</label>
+            <input asp-for="BlogRating" class="form-control" type="number" min="1" max="5" required />
+        </div>
+
+       
+
+        <button type="submit" class="btn btn-primary">Submit Post</button>
+    </form>
+</div>

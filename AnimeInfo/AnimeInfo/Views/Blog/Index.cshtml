@@ -1,52 +1,49 @@
-﻿@{
+﻿@model List<Blog>
+@{
     ViewData["Title"] = "Blog Page";
 }
-
 <div class="container-fluid">
     <h1 class="text-center mb-4">Blog Page</h1>
-    <p class="text-center"> A page dedicated to blog's </p>
-
+    
     <div class="row">
         <div class="col-md-3">
             <h2>Menu</h2>
             <ul class="list-unstyled">
-                <li><a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="Index">Blog</a></li>
-                <li><a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="TopPosts">Top Posts</a></li>
-                <li><a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="About">About</a></li>
+                <li><a class="nav-link text-dark" asp-action="Index">Blog Home</a></li>
+                <li><a class="nav-link text-dark" asp-action="Post">Create New Post</a></li>
+                <li><a class="nav-link text-dark" asp-action="TopPosts">Top Posts</a></li>
+                <li><a class="nav-link text-dark" asp-action="About">About</a></li>
             </ul>
         </div>
+        
         <div class="col-md-9">
-            <a class="nav-link text-dark mb-3" asp-area="" asp-controller="Blog" asp-action="Blogs">Write a New Blog</a>
-
-            <h2 class="mb-3">Posts</h2>
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <div class="card">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var post in Model)
+                {
+                    <div class="card mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">Post 1</h5>
-                            <p class="card-text">Short description of Post 1</p>
-                            <a href="#" class="btn btn-primary">Read More</a>
+                            <h5 class="card-title">@post.BlogTitle</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                By @post.BlogAuthor.Name on @post.BlogDate.ToString("MMM dd, yyyy")
+                            </h6>
+                            <p class="card-text">@post.BlogText</p>
+                            <div class="text-muted">
+                                Rating: @post.BlogRating/5
+                                <br />
+                              
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Post 2</h5>
-                            <p class="card-text">Short description of Post 2</p>
-                            <a href="#" class="btn btn-primary">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Post 3</h5>
-                            <p class="card-text">Short description of Post 3</p>
-                            <a href="#" class="btn btn-primary">Read More</a>
-                        </div>
-                    </div>
-                </div>
+                }
+            }
+            else
+            {
+                <p>No blog posts yet. Be the first to create one!</p>
+            }
+            
+            <div class="mt-4">
+                <a class="btn btn-primary" asp-action="Post">Create New Post</a>
             </div>
         </div>
     </div>
