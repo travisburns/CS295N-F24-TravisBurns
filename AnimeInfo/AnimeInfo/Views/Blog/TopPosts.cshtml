@@ -1,26 +1,33 @@
 ﻿@{
     ViewData["Title"] = "Top Posts";
 }
-
-<div class="container-fluid">
+<div class="container">
     <h1 class="text-center mb-4">Top Posts</h1>
-    <p class="text-center">A page dedicated to top blog posts</p>
+    <p class="text-center mb-4">A page dedicated to top blog posts</p>
     <div class="row">
-        <div class="col-md-3">
-            <h2>Menu</h2>
-            <ul class="list-unstyled">
-                <li><a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="Index">Blog</a></li>
-                <li><a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="TopPosts">Top Posts</a></li>
-                <li><a class="nav-link text-dark" asp-area="" asp-controller="Blog" asp-action="About">About</a></li>
-            </ul>
+        <div class="col-md-3 col-sm-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Menu</h2>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a class="nav-link text-dark" asp-controller="Blog" asp-action="Index">Blog</a></li>
+                        <li class="mb-2"><a class="nav-link text-dark" asp-controller="Blog" asp-action="TopPosts">Top Posts</a></li>
+                        <li class="mb-2"><a class="nav-link text-dark" asp-controller="Blog" asp-action="About">About</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class="col-md-9">
-            <h2 class="mb-3">Top Posts</h2>
-            <ul class="list-unstyled">
-                <li> <a href="#">Top Post 1</a></li>
-                <li><a href="#">Top Post 2</a></li>
-                <li><a href="#">Top Post 3</a></li>
-            </ul>
+        <div class="col-md-9 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Top Posts</h2>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Top Post 1</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Top Post 2</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Top Post 3</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>

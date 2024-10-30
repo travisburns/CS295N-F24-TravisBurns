@@ -2,36 +2,40 @@
 @{
     ViewData["Title"] = "Blog Page";
 }
-<div class="container-fluid">
+<div class="container">
     <h1 class="text-center mb-4">Blog Page</h1>
-    
+
     <div class="row">
-        <div class="col-md-3">
-            <h2>Menu</h2>
-            <ul class="list-unstyled">
-                <li><a class="nav-link text-dark" asp-action="Index">Blog Home</a></li>
-                <li><a class="nav-link text-dark" asp-action="Post">Create New Post</a></li>
-                <li><a class="nav-link text-dark" asp-action="TopPosts">Top Posts</a></li>
-                <li><a class="nav-link text-dark" asp-action="About">About</a></li>
-            </ul>
+        <!-- Sidebar -->
+        <div class="col-md-3 col-sm-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title h4 mb-3">Menu</h2>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><a class="nav-link text-dark" asp-action="Index">Blog Home</a></li>
+                        <li class="mb-2"><a class="nav-link text-dark" asp-action="Post">Create New Post</a></li>
+                        <li class="mb-2"><a class="nav-link text-dark" asp-action="TopPosts">Top Posts</a></li>
+                        <li class="mb-2"><a class="nav-link text-dark" asp-action="About">About</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        
-        <div class="col-md-9">
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-sm-12">
             @if (Model != null && Model.Any())
             {
                 foreach (var post in Model)
                 {
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">@post.BlogTitle</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">
+                            <h5 class="card-title mb-2">@post.BlogTitle</h5>
+                            <h6 class="card-subtitle mb-3 text-muted">
                                 By @post.BlogAuthor.Name on @post.BlogDate.ToString("MMM dd, yyyy")
                             </h6>
-                            <p class="card-text">@post.BlogText</p>
-                            <div class="text-muted">
+                            <p class="card-text mb-3">@post.BlogText</p>
+                            <div class="text-muted mb-2">
                                 Rating: @post.BlogRating/5
-                                <br />
-                              
                             </div>
                         </div>
                     </div>
@@ -39,11 +43,13 @@
             }
             else
             {
-                <p>No blog posts yet. Be the first to create one!</p>
+                <div class="alert alert-info">No blog posts yet. Be the first to create one!</div>
             }
-            
+
             <div class="mt-4">
-                <a class="btn btn-primary" asp-action="Post">Create New Post</a>
+                <a class="btn btn-primary" asp-action="Post">
+                    <i class="bi bi-plus-circle me-2"></i>Create New Post
+                </a>
             </div>
         </div>
     </div>
