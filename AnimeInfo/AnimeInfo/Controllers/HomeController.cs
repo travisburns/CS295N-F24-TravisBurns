@@ -1,4 +1,5 @@
 ﻿using AnimeInfo.Models;
+using AnimeInfo.AnimeQuiz;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -34,5 +35,18 @@ namespace AnimeInfo.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult Quiz() 
+        {
+            Quiz model = new Quiz();
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Quiz(Quiz model)
+        {
+            //TODO: do something with the quiz answers
+            return View();
+        }
+
     }
 }
