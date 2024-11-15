@@ -14,9 +14,9 @@ namespace BookReviewsTests
             Quiz quiz = new Quiz();
             Question q1 = new Question()
             {
-                Q = "Who is the author of One Piece?",
-                A = "Eiichiro Oda",
-                UserA = "Eiichiro Oda"  // Correct answer
+                Q = "Who is the creator of Dragon Ball, a foundational series for modern shonen anime?",
+                A = "Akira Toriyama",
+                UserA = "Akira Toriyama"  // Correct answer
             };
             //act
             bool isCorrect = quiz.checkAnswer(q1);
@@ -33,7 +33,7 @@ namespace BookReviewsTests
             {
                 Q = "Who is the author of Naruto?",
                 A = "Masashi Kishimoto",
-                UserA = "Tite Kubo"  // Wrong answer (Kubo is Bleach's author)
+                UserA = "Tite Kubo"  // Wrong answer 
             };
             //act
             bool isCorrect = quiz.checkAnswer(q2);

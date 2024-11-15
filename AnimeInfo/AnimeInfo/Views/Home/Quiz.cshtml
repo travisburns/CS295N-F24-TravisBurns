@@ -1,6 +1,29 @@
-﻿@model Quiz
+﻿@model QuizVM
 
-@foreach (Question question in Model.Questions)
-{
-    <p> question.Q </p>
-}
+<form method="post">
+    @Model.Questions[0].Q <br />
+    <input name="answer1" value="@Model.Questions[0].UserA" /> <br />
+    @if (Model.Questions[0].UserA != null)
+    {
+        <div>Answer: @Model.Questions[0].A </div>
+        <div>@(Model.Questions[0].IsRight ? "Right" : "Wrong")</div>
+    }
+
+    @Model.Questions[1].Q <br />
+    <input name="answer2" value="@Model.Questions[1].UserA" /> <br />
+    @if (Model.Questions[1].UserA != null)
+    {
+        <div>Answer: @Model.Questions[1].A </div>
+        <div>@(Model.Questions[1].IsRight ? "Right" : "Wrong")</div>
+    }
+
+    @Model.Questions[2].Q <br />
+    <input name="answer3" value="@Model.Questions[2].UserA" /> <br />
+    @if (Model.Questions[2].UserA != null)
+    {
+        <div>Answer: @Model.Questions[2].A </div>
+        <div>@(Model.Questions[2].IsRight ? "Right" : "Wrong")</div>
+    }
+
+    <input type="submit" />
+</form>
