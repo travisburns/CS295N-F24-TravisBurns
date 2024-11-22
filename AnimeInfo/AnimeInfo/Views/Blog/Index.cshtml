@@ -3,8 +3,7 @@
     ViewData["Title"] = "Blog Page";
 }
 <div class="container">
-    <h1 class="text-center mb-4">Blog Page</h1>
-
+    <h1 class="text-center mb-4">Blog Posts</h1>
     <div class="row">
         <!-- Sidebar -->
         <div class="col-md-3 col-sm-12 mb-4">
@@ -21,7 +20,7 @@
             </div>
         </div>
 
-        <!-- Main Content -->
+        <!-- Main Content - Blog Posts -->
         <div class="col-md-9 col-sm-12">
             @if (Model != null && Model.Any())
             {
@@ -29,12 +28,12 @@
                 {
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h5 class="card-title mb-2">@post.BlogTitle</h5>
-                            <h6 class="card-subtitle mb-3 text-muted">
-                                By @post.BlogAuthor.Name on @post.BlogDate.ToString("MMM dd, yyyy")
+                            <h3 class="card-title">@post.BlogTitle</h3>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                By @post.BlogAuthor.Name on @post.BlogDate.ToString("MMMM dd, yyyy")
                             </h6>
-                            <p class="card-text mb-3">@post.BlogText</p>
-                            <div class="text-muted mb-2">
+                            <p class="card-text">@post.BlogText</p>
+                            <div class="text-muted">
                                 Rating: @post.BlogRating/5
                             </div>
                         </div>
@@ -43,14 +42,14 @@
             }
             else
             {
-                <div class="alert alert-info">No blog posts yet. Be the first to create one!</div>
+                <div class="alert alert-info">
+                    No blog posts available. Be the first to create one!
+                </div>
             }
-
-            <div class="mt-4">
-                <a class="btn btn-primary" asp-action="Post">
-                    <i class="bi bi-plus-circle me-2"></i>Create New Post
-                </a>
-            </div>
         </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a class="btn btn-primary" asp-action="Post">Create New Post</a>
     </div>
 </div>
