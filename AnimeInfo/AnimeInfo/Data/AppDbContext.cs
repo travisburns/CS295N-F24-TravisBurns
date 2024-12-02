@@ -19,7 +19,7 @@ namespace AnimeInfo.Data
 
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Blog> Blogs { get; set; }
-
+        public object Reviews { get; internal set; }
     }
 }
 
