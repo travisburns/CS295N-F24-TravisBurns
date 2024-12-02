@@ -15,7 +15,7 @@ namespace AnimeInfo.Data
 
 
 
-        // one DbSet for each domain model class
+        // one DbSet for each domain model class//
 
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Blog> Blogs { get; set; }

@@ -13,7 +13,7 @@ namespace AnimeInfo.Tests
 
         public BlogControllerTests()
         {
-            // Setup
+     
             _repository = new FakeBlogRepository();
             _controller = new BlogController(_repository);
         }
@@ -21,10 +21,10 @@ namespace AnimeInfo.Tests
         [Fact]
         public async Task Index_ReturnsViewWithBlogs()
         {
-            // Act
+         
             var result = await _controller.Index() as ViewResult;
 
-            // Assert
+        
             Assert.NotNull(result);
             Assert.IsType<List<Blog>>(result.Model);
         }
@@ -32,11 +32,11 @@ namespace AnimeInfo.Tests
         [Fact]
         public void Post_GET_ReturnsViewWithNewBlogModel()
         {
-            // Act
+            
             var result = _controller.Post() as ViewResult;
             var model = result.Model as Blog;
 
-            // Assert
+       
             Assert.NotNull(result);
             Assert.NotNull(model);
             Assert.NotNull(model.BlogAuthor);
@@ -45,7 +45,7 @@ namespace AnimeInfo.Tests
         [Fact]
         public void Post_POST_StoresBlogAndRedirects()
         {
-            // Arrange
+        
             var blog = new Blog
             {
                 BlogTitle = "Test Blog",
@@ -53,10 +53,10 @@ namespace AnimeInfo.Tests
                 BlogAuthor = new AppUser { Name = "Test Author" }
             };
 
-            // Act
+        
             var result = _controller.Post(blog) as RedirectToActionResult;
 
-            // Assert
+           
             Assert.NotNull(result);
             Assert.Equal("Index", result.ActionName);
         }
