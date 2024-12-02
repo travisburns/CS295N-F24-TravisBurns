@@ -1,6 +1,7 @@
 ﻿using AnimeInfo.Models;
 using AnimeInfo.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace AnimeInfo.Controllers
 {
@@ -38,7 +39,18 @@ namespace AnimeInfo.Controllers
 
         public IActionResult Blogs()
         {
-            return View();
+            try
+            {
+                var blogs = _repo.GetBlogs();
+                return View(blogs);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel
+                {
+                    RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+                });
+            }
         }
 
         [HttpPost]
