@@ -32,8 +32,29 @@
                                 By @post.BlogAuthor.Name on @post.BlogDate.ToString("MMMM dd, yyyy")
                             </h6>
                             <p class="card-text">@post.BlogText</p>
-                            <div class="text-muted">
+                            <div class="text-muted mb-3">
                                 Rating: @post.BlogRating/5
+                            </div>
+
+                            <!-- Comments Section -->
+                            <div class="comments-section mt-4">
+                                <h5>Comments</h5>
+                                @if (post.Comments != null && post.Comments.Any())
+                                {
+                                    foreach (var comment in post.Comments)
+                                    {
+                                        <div class="comment border-top pt-3 mb-3">
+                                            <p>@comment.CommentText</p>
+                                            <small class="text-muted">
+                                                Posted by @comment.CommentAuthor.Name on @comment.CommentDate.ToString("MMMM dd, yyyy")
+                                            </small>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-muted">No comments yet.</p>
+                                }
                             </div>
                         </div>
                     </div>
