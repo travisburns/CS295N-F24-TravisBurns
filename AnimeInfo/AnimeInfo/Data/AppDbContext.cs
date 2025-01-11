@@ -1,9 +1,11 @@
 ﻿using AnimeInfo.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace AnimeInfo.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
 
     {
 
@@ -11,15 +13,19 @@ namespace AnimeInfo.Data
 
         public ApplicationDbContext(
 
-           DbContextOptions<ApplicationDbContext> options) : base(options) { }
+           DbContextOptions<ApplicationDbContext> options) : base(options) 
+        {
+            Blogs = Set<Blog>();
+            Comments = Set<Comment>();
+        }
 
 
 
         // one DbSet for each domain model class//
 
-        public DbSet<AppUser> AppUsers { get; set; }
+      
         public DbSet<Blog> Blogs { get; set; }
-        public object Reviews { get; internal set; }
+    
 
         public DbSet<Comment> Comments { get; set; }
     }

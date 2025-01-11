@@ -8,13 +8,14 @@ namespace AnimeInfo.Controllers
     public class BlogController : Controller
     {
         private readonly IBlogRepository _repo;
+        private readonly ILogger<BlogController> _logger;
 
         public BlogController(IBlogRepository repo)
         {
             _repo = repo;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var blogPosts = _repo.GetBlogs();
             return View("Index", blogPosts);
@@ -69,6 +70,7 @@ namespace AnimeInfo.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error retrieving blogs");
                 return View("Error", new ErrorViewModel
                 {
                     RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
