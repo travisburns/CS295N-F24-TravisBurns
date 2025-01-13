@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnimeInfo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250109225840_Identity")]
-    partial class Identity
+    [Migration("20250113215955_AddIdentity")]
+    partial class AddIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

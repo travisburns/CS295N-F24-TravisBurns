@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Blogs\" />
+    <Compile Remove="Views\Blogs\**" />
+    <Content Remove="Views\Blogs\**" />
+    <EmbeddedResource Remove="Views\Blogs\**" />
+    <None Remove="Views\Blogs\**" />
   </ItemGroup>
 
   <ItemGroup>

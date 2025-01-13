@@ -11,7 +11,7 @@ public static class SeedData
             var userManager = provider.GetRequiredService<UserManager<AppUser>>();
 
             // Create users with UserManager
-            const string SECRET_PASSWORD = "Secret1123";
+            const string PASSWORD = "Secret1123";
 
             AppUser travisburns = new AppUser
             {
@@ -26,8 +26,8 @@ public static class SeedData
                 SignUpdate = DateTime.Now
             };
 
-            var result1 = userManager.CreateAsync(travisburns, SECRET_PASSWORD).GetAwaiter().GetResult();
-            var result2 = userManager.CreateAsync(testUser, SECRET_PASSWORD).GetAwaiter().GetResult();
+            var result1 = userManager.CreateAsync(travisburns, PASSWORD).GetAwaiter().GetResult();
+            var result2 = userManager.CreateAsync(testUser, PASSWORD).GetAwaiter().GetResult();
 
             // Create a blog post
             var blog = new Blog
