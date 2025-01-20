@@ -3,6 +3,7 @@ using System;
 using AnimeInfo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnimeInfo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241202210427_AddCommentsTable")]
+    partial class AddCommentsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,9 +75,6 @@ namespace AnimeInfo.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("BlogId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CommentAuthorId")
                         .HasColumnType("int");
 
@@ -87,8 +86,6 @@ namespace AnimeInfo.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BlogId");
 
                     b.HasIndex("CommentAuthorId");
 
@@ -108,26 +105,13 @@ namespace AnimeInfo.Migrations
 
             modelBuilder.Entity("AnimeInfo.Models.Comment", b =>
                 {
-                    b.HasOne("AnimeInfo.Models.Blog", "Blog")
-                        .WithMany("Comments")
-                        .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AnimeInfo.Models.AppUser", "CommentAuthor")
                         .WithMany()
                         .HasForeignKey("CommentAuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Blog");
-
                     b.Navigation("CommentAuthor");
-                });
-
-            modelBuilder.Entity("AnimeInfo.Models.Blog", b =>
-                {
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

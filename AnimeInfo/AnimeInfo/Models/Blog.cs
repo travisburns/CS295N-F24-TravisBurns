@@ -13,6 +13,7 @@ namespace AnimeInfo.Models
         public AppUser BlogAuthor { get; set; }
         public DateTime BlogDate { get; set; }
         public int BlogRating { get; set; }
-        
+        public List<Comment> Comments { get; set; }
+
     }
 }

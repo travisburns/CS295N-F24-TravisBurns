@@ -17,7 +17,30 @@ namespace AnimeInfo.Controllers
         public async Task<IActionResult> Index()
         {
             var blogPosts = _repo.GetBlogs();
-            return View(blogPosts);
+            return View("Index", blogPosts);
+        }
+
+        [HttpPost]
+        public IActionResult Filter(string commenterName, DateTime? commentDate)
+        {
+            var blogs = _repo.GetBlogs();
+
+            if (!string.IsNullOrEmpty(commenterName) || commentDate.HasValue)
+            {
+                foreach (var blog in blogs)
+                {
+                    if (blog.Comments != null)
+                    {
+                        blog.Comments = blog.Comments
+                            .Where(c =>
+                                (string.IsNullOrEmpty(commenterName) || c.CommentAuthor.Name.Contains(commenterName, StringComparison.OrdinalIgnoreCase)) &&
+                                (!commentDate.HasValue || c.CommentDate.Date == commentDate.Value.Date))
+                            .ToList();
+                    }
+                }
+            }
+
+            return View("Index", blogs);
         }
 
         public IActionResult Post()

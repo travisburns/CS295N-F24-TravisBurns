@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 public class BlogRepository : IBlogRepository
 {
     private readonly ApplicationDbContext context;
-
     public BlogRepository(ApplicationDbContext appDbContext)
     {
         context = appDbContext;
@@ -16,7 +15,9 @@ public class BlogRepository : IBlogRepository
         get
         {
             return context.Blogs
-                .Include(blog => blog.BlogAuthor);
+                .Include(blog => blog.BlogAuthor)
+                .Include(blog => blog.Comments)
+                    .ThenInclude(comment => comment.CommentAuthor);
         }
     }
 
@@ -24,13 +25,17 @@ public class BlogRepository : IBlogRepository
     {
         return context.Blogs
             .Include(blog => blog.BlogAuthor)
+            .Include(blog => blog.Comments)
+                .ThenInclude(comment => comment.CommentAuthor)
             .ToList();
     }
 
-    public List<Blog> GetBlogs()  // Changed from string? to List<Blog> to match interface
+    public List<Blog> GetBlogs()
     {
         return context.Blogs
             .Include(blog => blog.BlogAuthor)
+            .Include(blog => blog.Comments)
+                .ThenInclude(comment => comment.CommentAuthor)
             .ToList();
     }
 
@@ -38,6 +43,8 @@ public class BlogRepository : IBlogRepository
     {
         return context.Blogs
             .Include(blog => blog.BlogAuthor)
+            .Include(blog => blog.Comments)
+                .ThenInclude(comment => comment.CommentAuthor)
             .Where(blog => blog.Id == id)
             .SingleOrDefault();
     }
