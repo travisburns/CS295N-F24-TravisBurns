@@ -1,34 +1,35 @@
 ﻿@model Blog
+
 @{
     ViewData["Title"] = "New Blog Post";
 }
-
 <div class="container-fluid">
     <h1 class="text-center mb-4">Create New Blog Post</h1>
-    
-    <form method="post">
-        <div class="form-group">
-            <label asp-for="BlogTitle">Title</label>
-            <input asp-for="BlogTitle" class="form-control" required />
+
+    <form method="post" class="container">
+        <div class="row">
+            <div class="col-lg-10 col-md-12 col-sm-12 p-2">
+                <div class="form-group mb-3">
+                    <label asp-for="BlogTitle" class="form-label">Title</label>
+                    <input asp-for="BlogTitle" class="form-control" required />
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="BlogText" class="form-label">Post Content</label>
+                    <textarea asp-for="BlogText" class="form-control col-lg-2 col-md-4 col-sm-12" required></textarea>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="BlogAuthor.Name" class="form-label">Author Name</label>
+                    <input asp-for="BlogAuthor.Name" class="form-control col-lg-10 col-md-8 col-sm-12" required />
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="BlogRating" class="form-label">Rating (1-5)</label>
+                    <input asp-for="BlogRating" class="form-control col-lg-2 col-md-3 col-sm-6" type="number" min="1" max="5" required />
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Submit Post</button>
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label asp-for="BlogText">Post Content</label>
-            <textarea asp-for="BlogText" class="form-control" rows="5" required></textarea>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="BlogAuthor.Name">Author Name</label>
-            <input asp-for="BlogAuthor.Name" class="form-control" required />
-        </div>
-
-        <div class="form-group">
-            <label asp-for="BlogRating">Rating (1-5)</label>
-            <input asp-for="BlogRating" class="form-control" type="number" min="1" max="5" required />
-        </div>
-
-       
-
-        <button type="submit" class="btn btn-primary">Submit Post</button>
     </form>
 </div>
