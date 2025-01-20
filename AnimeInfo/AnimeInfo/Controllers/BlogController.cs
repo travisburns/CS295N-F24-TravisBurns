@@ -1,25 +1,22 @@
 ﻿using AnimeInfo.Models;
 using AnimeInfo.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace AnimeInfo.Controllers
 {
     public class BlogController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IBlogRepository _repo;
 
-        public BlogController(ApplicationDbContext context)
+        public BlogController(IBlogRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         public async Task<IActionResult> Index()
         {
-            var blogPosts = await _context.Blogs
-                .Include(b => b.BlogAuthor)
-                .OrderByDescending(b => b.BlogDate)
-                .ToListAsync();
+            var blogPosts = _repo.GetBlogs();
             return View(blogPosts);
         }
 
@@ -42,31 +39,26 @@ namespace AnimeInfo.Controllers
 
         public IActionResult Blogs()
         {
-            return View();
+            try
+            {
+                var blogs = _repo.GetBlogs();
+                return View(blogs);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel
+                {
+                    RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+                });
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Blog model)
+        public IActionResult Post(Blog model)
         {
-            if (ModelState.IsValid)
-            {
-                model.BlogDate = DateTime.Now;
-
-                // Save the AppUser first
-                if (model.BlogAuthor != null)
-                {
-                    model.BlogAuthor.SignUpdate = DateTime.Now;
-                    _context.AppUsers.Add(model.BlogAuthor);
-                    await _context.SaveChangesAsync();
-                }
-
-                // Then save the blog post
-                _context.Blogs.Add(model);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Index");
-            }
-            return View(model);
+            model.BlogDate = DateTime.Now;
+            _repo.StoreBlog(model);
+            return RedirectToAction("Index");
         }
     }
 }
