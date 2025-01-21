@@ -39,13 +39,13 @@ public class BlogRepository : IBlogRepository
             .ToList();
     }
 
-    public Blog GetBlogById(int id)
+    public Blog? GetBlogById(int id)
     {
         return context.Blogs
             .Include(blog => blog.BlogAuthor)
             .Include(blog => blog.Comments)
                 .ThenInclude(comment => comment.CommentAuthor)
-            .Where(blog => blog.Id == id)
+            .Where(blog => blog.BlogId == id)
             .SingleOrDefault();
     }
 
