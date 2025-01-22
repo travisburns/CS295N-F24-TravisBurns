@@ -120,7 +120,7 @@ namespace AnimeInfo.Controllers
                     CommentAuthor = user,
                     BlogId = blogId
                 };
-                // Add method to your repository to save comments
+                // Add method to repo to save comments - not sure if this was part of requirments for lab2 but saw in the videos that saving comments on a post was demonstrated. 
                 _repo.AddComment(comment);
                 return RedirectToAction("Details", new { id = blogId });
             }
