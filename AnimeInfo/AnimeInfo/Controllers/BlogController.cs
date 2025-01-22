@@ -2,6 +2,7 @@
 using AnimeInfo.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 
 namespace AnimeInfo.Controllers
 {
@@ -9,10 +10,14 @@ namespace AnimeInfo.Controllers
     {
         private readonly IBlogRepository _repo;
         private readonly ILogger<BlogController> _logger;
+        private readonly UserManager<AppUser> _userManager;
 
-        public BlogController(IBlogRepository repo)
+        public BlogController(IBlogRepository repo, UserManager<AppUser> userManager,
+            ILogger<BlogController> logger)
         {
             _repo = repo;
+            _userManager = userManager;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -25,7 +30,6 @@ namespace AnimeInfo.Controllers
         public IActionResult Filter(string commenterName, DateTime? commentDate)
         {
             var blogs = _repo.GetBlogs();
-
             if (!string.IsNullOrEmpty(commenterName) || commentDate.HasValue)
             {
                 foreach (var blog in blogs)
@@ -40,14 +44,12 @@ namespace AnimeInfo.Controllers
                     }
                 }
             }
-
             return View("Index", blogs);
         }
 
         public IActionResult Post()
         {
             Blog model = new Blog();
-            model.BlogAuthor = new AppUser();
             return View(model);
         }
 
@@ -79,11 +81,55 @@ namespace AnimeInfo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(Blog model)
+        public async Task<IActionResult> Post(Blog model)
         {
-            model.BlogDate = DateTime.Now;
-            _repo.StoreBlog(model);
-            return RedirectToAction("Index");
+            // Get the AppUser object for the current user
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user != null)
+            {
+                model.BlogDate = DateTime.Now;
+                model.BlogAuthor = user;  // Set the current user as the blog author
+                _repo.StoreBlog(model);
+                return RedirectToAction("Index");
+            }
+
+            // Handle case where user isn't logged in
+            return RedirectToAction("Register", "Account");
         }
+
+        public IActionResult Details(int id)
+        {
+            var blog = _repo.GetBlogById(id);
+            if (blog == null)
+                return NotFound();
+            return View(blog);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(int blogId, string commentText)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                var comment = new Comment
+                {
+                    CommentText = commentText,
+                    CommentDate = DateTime.Now,
+                    CommentAuthor = user,
+                    BlogId = blogId
+                };
+                // Add method to your repository to save comments
+                _repo.AddComment(comment);
+                return RedirectToAction("Details", new { id = blogId });
+            }
+            return RedirectToAction("Login", "Account");
+        }
+
+
     }
+
+
+
 }

@@ -10,6 +10,12 @@ public class BlogRepository : IBlogRepository
         context = appDbContext;
     }
 
+    public void AddComment(Comment comment)
+    {
+        context.Comments.Add(comment);
+        context.SaveChanges();
+    }
+
     public IQueryable<Blog> Blogs
     {
         get

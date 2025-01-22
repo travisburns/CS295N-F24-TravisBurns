@@ -8,6 +8,8 @@ public interface IBlogRepository
 	public int StoreReview(Blog model);
     public List <Blog> GetBlogs();
     void StoreBlog(Blog model);
+
+    void AddComment(Comment comment);
 }
 
 
