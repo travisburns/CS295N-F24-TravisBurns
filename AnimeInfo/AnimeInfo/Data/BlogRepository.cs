@@ -10,6 +10,12 @@ public class BlogRepository : IBlogRepository
         context = appDbContext;
     }
 
+    public void AddComment(Comment comment)
+    {
+        context.Comments.Add(comment);
+        context.SaveChanges();
+    }
+
     public IQueryable<Blog> Blogs
     {
         get
@@ -39,13 +45,13 @@ public class BlogRepository : IBlogRepository
             .ToList();
     }
 
-    public Blog GetBlogById(int id)
+    public Blog? GetBlogById(int id)
     {
         return context.Blogs
             .Include(blog => blog.BlogAuthor)
             .Include(blog => blog.Comments)
                 .ThenInclude(comment => comment.CommentAuthor)
-            .Where(blog => blog.Id == id)
+            .Where(blog => blog.BlogId == id)
             .SingleOrDefault();
     }
 

@@ -1,69 +1,73 @@
-﻿using AnimeInfo.Models;
-namespace AnimeInfo.Data
+﻿using AnimeInfo.Data;
+using AnimeInfo.Models;
+using Microsoft.AspNetCore.Identity;
+
+public static class SeedData
 {
-    public static class SeedData
+    public static void Seed(ApplicationDbContext context, IServiceProvider provider)
     {
-        public static void Seed(ApplicationDbContext context)
+        if (!context.Comments.Any())
         {
-            if (!context.Comments.Any())
+            var userManager = provider.GetRequiredService<UserManager<AppUser>>();
+
+            // Create users with UserManager
+            const string PASSWORD = "Secret1123";
+
+            AppUser travisburns = new AppUser
             {
-                // First create and save users
-                var user1 = new AppUser
+                UserName = "travisburns@gmail.com",
+                Name = "Travis Burns",
+                SignUpdate = DateTime.Now
+            };
+            AppUser testUser = new AppUser
+            {
+                UserName = "testuser@example.com",
+                Name = "Test User",
+                SignUpdate = DateTime.Now
+            };
+
+            var result1 = userManager.CreateAsync(travisburns, PASSWORD).GetAwaiter().GetResult();
+            var result2 = userManager.CreateAsync(testUser, PASSWORD).GetAwaiter().GetResult();
+
+            // Create a blog post
+            var blog = new Blog
+            {
+                BlogTitle = "First Blog Post",
+                BlogText = "Welcome to our first blog post!",
+                BlogAuthor = travisburns, 
+                BlogDate = DateTime.Now,
+                BlogRating = 5
+            };
+            context.Blogs.Add(blog);
+            context.SaveChanges();
+
+            // Create comments
+            var comments = new List<Comment>
+            {
+                new Comment
                 {
-                    Name = "John Smith",
-                    SignUpdate = DateTime.Now
-                };
-                var user2 = new AppUser
+                    CommentText = "This is a great article!",
+                    CommentDate = DateTime.Parse("2024-03-01"),
+                    CommentAuthor = travisburns,
+                    Blog = blog
+                },
+                new Comment
                 {
-                    Name = "Jane Doe",
-                    SignUpdate = DateTime.Now
-                };
-
-                context.AppUsers.AddRange(user1, user2);
-                context.SaveChanges();
-
-                // Create a blog post first
-                var blog = new Blog
+                    CommentText = "I learned a lot from this post.",
+                    CommentDate = DateTime.Parse("2024-03-15"),
+                    CommentAuthor = testUser,
+                    Blog = blog
+                },
+                new Comment
                 {
-                    BlogTitle = "First Blog Post",
-                    BlogText = "Welcome to our first blog post!",
-                    BlogAuthor = user1,
-                    BlogDate = DateTime.Now,
-                    BlogRating = 5
-                };
-
-                context.Blogs.Add(blog);
-                context.SaveChanges();
-
-                // Now create comments connected to the blog
-                var comments = new List<Comment>
-                {
-                    new Comment
-                    {
-                        CommentText = "This is a great article!",
-                        CommentDate = DateTime.Parse("2024-03-01"),
-                        CommentAuthor = user1,
-                        Blog = blog
-                    },
-                    new Comment
-                    {
-                        CommentText = "I learned a lot from this post.",
-                        CommentDate = DateTime.Parse("2024-03-15"),
-                        CommentAuthor = user2,
-                        Blog = blog
-                    },
-                    new Comment
-                    {
-                        CommentText = "Looking forward to more content.",
-                        CommentDate = DateTime.Parse("2024-03-20"),
-                        CommentAuthor = user1,
-                        Blog = blog
-                    }
-                };
-
-                context.Comments.AddRange(comments);
-                context.SaveChanges();
-            }
+                    CommentText = "Looking forward to more content.",
+                    CommentDate = DateTime.Parse("2024-03-20"),
+                    CommentAuthor = travisburns,
+                    Blog = blog
+                }
+            };
+            context.Comments.AddRange(comments);
+            context.SaveChanges();
         }
     }
 }

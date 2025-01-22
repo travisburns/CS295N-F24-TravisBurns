@@ -1,9 +1,11 @@
-﻿namespace AnimeInfo.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace AnimeInfo.Models
 {
-    public class AppUser
+    public class AppUser: IdentityUser
     {
-        public int Id { get; set; }  // This will be your primary key
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
+
         public DateTime SignUpdate { get; set; }
     }
 }
