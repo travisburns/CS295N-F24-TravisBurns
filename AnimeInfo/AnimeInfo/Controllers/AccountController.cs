@@ -86,7 +86,7 @@ namespace AnimeInfo.Controllers
         }
 
 
-        public ViewResult AcessDenied()
+        public ViewResult AccessDenied()
         {
             {
                 return View();

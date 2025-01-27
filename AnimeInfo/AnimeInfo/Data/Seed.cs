@@ -4,15 +4,43 @@ using Microsoft.AspNetCore.Identity;
 
 public static class SeedData
 {
-    public static void Seed(ApplicationDbContext context, IServiceProvider provider)
+    public static async Task Seed(ApplicationDbContext context, IServiceProvider provider)
     {
+        // First seed the admin role and user
+        var roleManager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = provider.GetRequiredService<UserManager<AppUser>>();
+
+        // Create admin role if it doesn't exist
+        string adminRole = "Admin";
+        if (!await roleManager.RoleExistsAsync(adminRole))
+        {
+            await roleManager.CreateAsync(new IdentityRole(adminRole));
+        }
+
+        // Create admin user if it doesn't exist
+        string adminEmail = "admin@animeinfo.com";
+        if (await userManager.FindByEmailAsync(adminEmail) == null)
+        {
+            var adminUser = new AppUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                Name = "Admin User",
+                SignUpdate = DateTime.Now
+            };
+
+            var result = await userManager.CreateAsync(adminUser, "Admin#123");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(adminUser, adminRole);
+            }
+        }
+
+        // Only seed other data if Comments table is empty
         if (!context.Comments.Any())
         {
-            var userManager = provider.GetRequiredService<UserManager<AppUser>>();
-
             // Create users with UserManager
             const string PASSWORD = "Secret1123";
-
             AppUser travisburns = new AppUser
             {
                 UserName = "travisburns@gmail.com",
@@ -26,20 +54,20 @@ public static class SeedData
                 SignUpdate = DateTime.Now
             };
 
-            var result1 = userManager.CreateAsync(travisburns, PASSWORD).GetAwaiter().GetResult();
-            var result2 = userManager.CreateAsync(testUser, PASSWORD).GetAwaiter().GetResult();
+            var result1 = await userManager.CreateAsync(travisburns, PASSWORD);
+            var result2 = await userManager.CreateAsync(testUser, PASSWORD);
 
             // Create a blog post
             var blog = new Blog
             {
                 BlogTitle = "First Blog Post",
                 BlogText = "Welcome to our first blog post!",
-                BlogAuthor = travisburns, 
+                BlogAuthor = travisburns,
                 BlogDate = DateTime.Now,
                 BlogRating = 5
             };
             context.Blogs.Add(blog);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
             // Create comments
             var comments = new List<Comment>
@@ -67,7 +95,7 @@ public static class SeedData
                 }
             };
             context.Comments.AddRange(comments);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }
