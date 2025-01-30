@@ -3,6 +3,7 @@ using AnimeInfo.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AnimeInfo.Controllers
 {
@@ -47,6 +48,7 @@ namespace AnimeInfo.Controllers
             return View("Index", blogs);
         }
 
+        [Authorize]
         public IActionResult Post()
         {
             Blog model = new Blog();
@@ -80,6 +82,7 @@ namespace AnimeInfo.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Post(Blog model)
         {
@@ -124,7 +127,7 @@ namespace AnimeInfo.Controllers
                 _repo.AddComment(comment);
                 return RedirectToAction("Details", new { id = blogId });
             }
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Register", "Account");
         }
 
 
