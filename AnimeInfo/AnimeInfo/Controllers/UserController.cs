@@ -37,6 +37,50 @@ namespace AnimeInfo.Controllers
             return View(model);
         }
 
+        public IActionResult Create()
+        {
+            return View(new AdminCreateUserViewModel());
+        }
+
+        // New method to handle user creation
+        [HttpPost]
+        public async Task<IActionResult> Create(AdminCreateUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new AppUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Name = model.Name,
+                    SignUpdate = DateTime.Now
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    if (model.IsAdmin)
+                    {
+                        // Check if Admin role exists, create if it doesn't
+                        if (!await _roleManager.RoleExistsAsync("Admin"))
+                        {
+                            await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                        }
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                    }
+
+                    return RedirectToAction("Index");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View(model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
 
