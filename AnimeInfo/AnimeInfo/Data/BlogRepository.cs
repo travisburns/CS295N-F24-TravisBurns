@@ -10,10 +10,10 @@ public class BlogRepository : IBlogRepository
         context = appDbContext;
     }
 
-    public void AddComment(Comment comment)
+    public async Task AddComment(Comment comment)
     {
         context.Comments.Add(comment);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
     public IQueryable<Blog> Blogs
@@ -27,45 +27,45 @@ public class BlogRepository : IBlogRepository
         }
     }
 
-    public List<Blog> GetReviews()
+    public async Task <List<Blog>> GetReviews()
     {
-        return context.Blogs
+        return await context.Blogs
             .Include(blog => blog.BlogAuthor)
             .Include(blog => blog.Comments)
                 .ThenInclude(comment => comment.CommentAuthor)
-            .ToList();
+            .ToListAsync();
     }
 
-    public List<Blog> GetBlogs()
+    public async Task <List<Blog>> GetBlogs()
     {
-        return context.Blogs
+        return await context.Blogs
             .Include(blog => blog.BlogAuthor)
             .Include(blog => blog.Comments)
                 .ThenInclude(comment => comment.CommentAuthor)
-            .ToList();
+            .ToListAsync();
     }
 
-    public Blog? GetBlogById(int id)
+    public async Task <Blog?> GetBlogById(int id)
     {
-        return context.Blogs
+        return await context.Blogs
             .Include(blog => blog.BlogAuthor)
             .Include(blog => blog.Comments)
                 .ThenInclude(comment => comment.CommentAuthor)
             .Where(blog => blog.BlogId == id)
-            .SingleOrDefault();
+            .SingleOrDefaultAsync();
     }
 
-    public int StoreReview(Blog model)
+    public async Task <int> StoreReview(Blog model)
     {
         model.BlogDate = DateTime.Now;
         context.Blogs.Add(model);
-        return context.SaveChanges();
+        return await context.SaveChangesAsync();
     }
 
-    public void StoreBlog(Blog model)
+    public async Task StoreBlog(Blog model)
     {
         model.BlogDate = DateTime.Now;
         context.Blogs.Add(model);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 }

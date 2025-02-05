@@ -29,6 +29,21 @@ namespace AnimeInfo.Tests
         }
 
         [Fact]
+
+        public async Task Index_ReturnsViewWithBlogs()
+        { 
+            var blogs = new List <Blog>();
+            _mockRepo.Setup(repo => repo.GetBlogs())
+                .ReturnsAsync(blogs);
+            var controller = new BlogController(_mockRepo.Object, _mockUserManager.Object, _mockLogger.Object);
+
+            var result = await controller.Index() as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(blogs, result.Model);
+        }
+
+        [Fact]
         public void Post_GET_ReturnsViewWithModel()
         {
 
@@ -59,6 +74,9 @@ namespace AnimeInfo.Tests
             var testUser = new AppUser { Id = "1", UserName = "test@test.com" };
             _mockUserManager.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
                 .ReturnsAsync(testUser);
+
+            _mockRepo.Setup(x => x.StoreBlog(It.IsAny<Blog>()))
+               .Returns(Task.CompletedTask);
 
             var result = await controller.Post(blog) as RedirectToActionResult;
 

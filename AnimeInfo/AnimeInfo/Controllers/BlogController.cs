@@ -21,16 +21,16 @@ namespace AnimeInfo.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var blogPosts = _repo.GetBlogs();
+            var blogPosts = await _repo.GetBlogs();
             return View("Index", blogPosts);
         }
 
         [HttpPost]
-        public IActionResult Filter(string commenterName, DateTime? commentDate)
+        public async Task<IActionResult> Filter(string commenterName, DateTime? commentDate)
         {
-            var blogs = _repo.GetBlogs();
+            var blogs = await _repo.GetBlogs();
             if (!string.IsNullOrEmpty(commenterName) || commentDate.HasValue)
             {
                 foreach (var blog in blogs)
@@ -65,11 +65,11 @@ namespace AnimeInfo.Controllers
             return View();
         }
 
-        public IActionResult Blogs()
+        public async Task<IActionResult> Blogs()
         {
             try
             {
-                var blogs = _repo.GetBlogs();
+                var blogs = await _repo.GetBlogs();
                 return View(blogs);
             }
             catch (Exception ex)
@@ -93,7 +93,7 @@ namespace AnimeInfo.Controllers
             {
                 model.BlogDate = DateTime.Now;
                 model.BlogAuthor = user;  // Set the current user as the blog author
-                _repo.StoreBlog(model);
+               await _repo.StoreBlog(model);
                 return RedirectToAction("Index");
             }
 
@@ -101,9 +101,9 @@ namespace AnimeInfo.Controllers
             return RedirectToAction("Register", "Account");
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var blog = _repo.GetBlogById(id);
+            var blog = await _repo.GetBlogById(id);
             if (blog == null)
                 return NotFound();
             return View(blog);
@@ -124,7 +124,7 @@ namespace AnimeInfo.Controllers
                     BlogId = blogId
                 };
                 // Add method to repo to save comments - not sure if this was part of requirments for lab2 but saw in the videos that saving comments on a post was demonstrated. 
-                _repo.AddComment(comment);
+               await _repo.AddComment(comment);
                 return RedirectToAction("Details", new { id = blogId });
             }
             return RedirectToAction("Register", "Account");

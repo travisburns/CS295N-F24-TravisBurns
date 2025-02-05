@@ -1,15 +1,13 @@
 ﻿using AnimeInfo.Models;
-using System;
-
 public interface IBlogRepository
 {
-	public List<Blog> GetReviews();
-	public Blog?  GetBlogById(int id);
-	public int StoreReview(Blog model);
-    public List <Blog> GetBlogs();
-    void StoreBlog(Blog model);
+	Task <List<Blog>> GetReviews();
+	Task <Blog?>  GetBlogById(int id);
+	public Task <int> StoreReview(Blog model);
+    public Task <List<Blog>> GetBlogs();
+    public Task StoreBlog(Blog model);
 
-    void AddComment(Comment comment);
+    public Task AddComment(Comment comment);
 }
 
 
