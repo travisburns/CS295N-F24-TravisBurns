@@ -4,16 +4,13 @@ namespace AnimeInfo.Models
 {
     public class Blog
     {
-      
-
-        [Key]
-        public int Id { get; set; }  // Primary key
-        public string BlogTitle { get; set; }
-        public string BlogText { get; set; }
-        public AppUser BlogAuthor { get; set; }
-        public DateTime BlogDate { get; set; }
+        public int BlogId { get; set; }
+        public string BlogTitle { get; set; } = string.Empty;
+        public string BlogText { get; set; } = string.Empty;
+        public DateTime BlogDate { get; set; }  
         public int BlogRating { get; set; }
-        public List<Comment> Comments { get; set; }
-
+        public AppUser BlogAuthor { get; set; } = null!;
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }
+
