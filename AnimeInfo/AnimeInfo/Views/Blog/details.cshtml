@@ -19,6 +19,31 @@
                         <small class="text-muted">
                             Posted by @comment.CommentAuthor.Name on @comment.CommentDate.ToString("MMMM dd, yyyy")
                         </small>
+
+                        <!-- Replies Section - ADD THIS ENTIRE BLOCK -->
+                        <div class="replies-section ml-4 mt-2">
+                            @foreach (var reply in comment.Replies)
+                            {
+                                <div class="reply border-left pl-3 mt-2">
+                                    <p>@reply.ReplyText</p>
+                                    <small class="text-muted">
+                                        Reply by @reply.ReplyAuthor.Name on @reply.ReplyDate.ToString("MMMM dd, yyyy")
+                                    </small>
+                                </div>
+                            }
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <form asp-action="AddReply" method="post" class="mt-2">
+                                    <input type="hidden" name="commentId" value="@comment.Id" />
+                                    <div class="input-group">
+                                        <input type="text" name="replyText" class="form-control" placeholder="Write a reply..." required />
+                                        <button type="submit" class="btn btn-secondary">Reply</button>
+                                    </div>
+                                </form>
+                            }
+                        </div>
+                        <!-- End of Replies Section -->
                     </div>
                 }
 

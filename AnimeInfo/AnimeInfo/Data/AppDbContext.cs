@@ -14,6 +14,19 @@ namespace AnimeInfo.Data
 
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Reply> Replies { get; set; } 
+
+       
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+         
+            modelBuilder.Entity<Reply>()
+                .HasOne(r => r.Comment)
+                .WithMany(c => c.Replies)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }
 

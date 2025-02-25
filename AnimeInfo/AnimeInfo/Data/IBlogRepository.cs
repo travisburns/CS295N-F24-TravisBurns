@@ -8,6 +8,9 @@ public interface IBlogRepository
     public Task StoreBlog(Blog model);
 
     public Task AddComment(Comment comment);
+
+    Task AddReply(Reply reply);
+    Task<Comment?> GetCommentById(int id);
 }
 
 

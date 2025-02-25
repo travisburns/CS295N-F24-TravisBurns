@@ -110,6 +110,37 @@ namespace AnimeInfo.Controllers
         }
 
 
+
+        [HttpPost]
+        public async Task<IActionResult> AddReply(int commentId, string replyText)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                // Get the comment
+                var comment = await _repo.GetCommentById(commentId);
+
+                if (comment != null && user != null)
+                {
+                    var reply = new Reply
+                    {
+                        ReplyText = replyText,
+                        ReplyDate = DateTime.Now,
+                        ReplyAuthor = user,
+                        CommentId = commentId,
+                        Comment = comment
+                    };
+
+                    // Add the new reply
+                    await _repo.AddReply(reply);
+                    return RedirectToAction("Details", new { id = comment.BlogId });
+                }
+            }
+            return RedirectToAction("Register", "Account");
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> AddComment(int blogId, string commentText)
         {

@@ -12,5 +12,7 @@ namespace AnimeInfo.Models
 
         public int BlogId { get; set; }
         public Blog Blog { get; set; } = null!;
+
+        public ICollection<Reply> Replies { get; set; } = new List<Reply>();
     }
 }

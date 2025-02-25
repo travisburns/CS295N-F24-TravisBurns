@@ -1,6 +1,7 @@
 ﻿using AnimeInfo.Data;
 using AnimeInfo.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 public class BlogRepository : IBlogRepository
 {
@@ -42,6 +43,9 @@ public class BlogRepository : IBlogRepository
             .Include(blog => blog.BlogAuthor)
             .Include(blog => blog.Comments)
                 .ThenInclude(comment => comment.CommentAuthor)
+                 .Include(blog => blog.Comments)
+            .ThenInclude(comment => comment.Replies)
+                .ThenInclude(reply => reply.ReplyAuthor)
             .ToListAsync();
     }
 
@@ -51,6 +55,9 @@ public class BlogRepository : IBlogRepository
             .Include(blog => blog.BlogAuthor)
             .Include(blog => blog.Comments)
                 .ThenInclude(comment => comment.CommentAuthor)
+                .Include(blog => blog.Comments)
+                 .ThenInclude(comment => comment.Replies) 
+                .ThenInclude(reply => reply.ReplyAuthor)
             .Where(blog => blog.BlogId == id)
             .SingleOrDefaultAsync();
     }
@@ -67,5 +74,21 @@ public class BlogRepository : IBlogRepository
         model.BlogDate = DateTime.Now;
         context.Blogs.Add(model);
         await context.SaveChangesAsync();
+    }
+
+    public async Task AddReply(Reply reply)
+    {
+        context.Replies.Add(reply);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<Comment?> GetCommentById(int id)
+    {
+        return await context.Comments
+            .Include(c => c.CommentAuthor)
+            .Include(c => c.Blog)
+            .Include(c => c.Replies)
+                .ThenInclude(r => r.ReplyAuthor)
+            .FirstOrDefaultAsync(c => c.Id == id);
     }
 }
