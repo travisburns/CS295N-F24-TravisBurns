@@ -48,7 +48,9 @@
                 {
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h3 class="card-title">@post.BlogTitle</h3>
+                            <h3 class="card-title">
+                                <a asp-action="Details" asp-route-id="@post.BlogId">@post.BlogTitle</a>
+                            </h3>
                         <h6 class="card-subtitle mb-2 text-muted">
                             By @post.BlogAuthor.Name on @post.BlogDate.ToString("MMMM dd, yyyy")
                         </h6>
@@ -57,19 +59,31 @@
                             Rating: @post.BlogRating/5
                         </div>
 
-                        <!-- Comments Section -->
                         <div class="comments-section mt-4">
                             <h5>Comments</h5>
                             @if (post.Comments != null && post.Comments.Any())
                                 {
                                     foreach (var comment in post.Comments)
                                     {
-                            <div class="comment border-top pt-3 mb-3">
-                                <p>@comment.CommentText</p>
-                                <small class="text-muted">
-                                    Posted by @comment.CommentAuthor.Name on @comment.CommentDate.ToString("MMMM dd, yyyy")
-                                </small>
-                            </div>
+                                        <div class="comment border-top pt-3 mb-3">
+                                            <p>@comment.CommentText</p>
+                                            <small class="text-muted">
+                                                Posted by @comment.CommentAuthor.Name on @comment.CommentDate.ToString("MMMM dd, yyyy")
+                                            </small>
+
+                                           
+                                            <div class="replies-section ml-4 mt-2">
+                                                @foreach (var reply in comment.Replies)
+                                                {
+                                                    <div class="reply border-left pl-3 mt-2">
+                                                        <p>@reply.ReplyText</p>
+                                                        <small class="text-muted">
+                                                            Reply by @reply.ReplyAuthor.Name on @reply.ReplyDate.ToString("MMMM dd, yyyy")
+                                                        </small>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
                                     }
                                 }
                                 else
