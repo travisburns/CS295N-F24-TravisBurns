@@ -162,6 +162,32 @@ namespace AnimeInfo.Controllers
         }
 
 
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> DeleteComment(int id)
+        {
+            var comment = await _repo.GetCommentById(id);
+            if (comment == null)
+                return NotFound();
+
+            int blogId = comment.BlogId;
+            await _repo.DeleteComment(id);
+            return RedirectToAction("Details", new { id = blogId });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> DeleteReply(int id, int commentId)
+        {
+            var comment = await _repo.GetCommentById(commentId);
+            if (comment == null)
+                return NotFound();
+
+            await _repo.DeleteReply(id);
+            return RedirectToAction("Details", new { id = comment.BlogId });
+        }
+
+
     }
 
 

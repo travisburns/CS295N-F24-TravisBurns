@@ -9,7 +9,7 @@
             </h6>
             <p class="card-text">@Model.BlogText</p>
 
-            <!-- Comments Section -->
+         
             <div class="comments-section mt-4">
                 <h4>Comments</h4>
                 @foreach (var comment in Model.Comments)
@@ -20,7 +20,7 @@
                             Posted by @comment.CommentAuthor.Name on @comment.CommentDate.ToString("MMMM dd, yyyy")
                         </small>
 
-                        <!-- Replies Section - ADD THIS ENTIRE BLOCK -->
+                       
                         <div class="replies-section ml-4 mt-2">
                             @foreach (var reply in comment.Replies)
                             {
@@ -29,6 +29,18 @@
                                     <small class="text-muted">
                                         Reply by @reply.ReplyAuthor.Name on @reply.ReplyDate.ToString("MMMM dd, yyyy")
                                     </small>
+
+                                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.Identity.Name == reply.ReplyAuthor.UserName))
+                                    {
+                                        <form asp-action="DeleteReply" method="post" class="d-inline mt-1">
+                                            <input type="hidden" name="id" value="@reply.ReplyId" />
+                                            <input type="hidden" name="commentId" value="@comment.Id" />
+                                            <button type="submit" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Delete this reply?');">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    }
                                 </div>
                             }
 
@@ -43,7 +55,7 @@
                                 </form>
                             }
                         </div>
-                        <!-- End of Replies Section -->
+                       
                     </div>
                 }
 

@@ -28,7 +28,7 @@ public class BlogRepository : IBlogRepository
         }
     }
 
-    public async Task <List<Blog>> GetReviews()
+    public async Task<List<Blog>> GetReviews()
     {
         return await context.Blogs
             .Include(blog => blog.BlogAuthor)
@@ -37,7 +37,7 @@ public class BlogRepository : IBlogRepository
             .ToListAsync();
     }
 
-    public async Task <List<Blog>> GetBlogs()
+    public async Task<List<Blog>> GetBlogs()
     {
         return await context.Blogs
             .Include(blog => blog.BlogAuthor)
@@ -49,20 +49,20 @@ public class BlogRepository : IBlogRepository
             .ToListAsync();
     }
 
-    public async Task <Blog?> GetBlogById(int id)
+    public async Task<Blog?> GetBlogById(int id)
     {
         return await context.Blogs
             .Include(blog => blog.BlogAuthor)
             .Include(blog => blog.Comments)
                 .ThenInclude(comment => comment.CommentAuthor)
                 .Include(blog => blog.Comments)
-                 .ThenInclude(comment => comment.Replies) 
+                 .ThenInclude(comment => comment.Replies)
                 .ThenInclude(reply => reply.ReplyAuthor)
             .Where(blog => blog.BlogId == id)
             .SingleOrDefaultAsync();
     }
 
-    public async Task <int> StoreReview(Blog model)
+    public async Task<int> StoreReview(Blog model)
     {
         model.BlogDate = DateTime.Now;
         context.Blogs.Add(model);
@@ -90,5 +90,32 @@ public class BlogRepository : IBlogRepository
             .Include(c => c.Replies)
                 .ThenInclude(r => r.ReplyAuthor)
             .FirstOrDefaultAsync(c => c.Id == id);
+    }
+
+    public async Task DeleteComment(int id)
+    {
+        var comment = await context.Comments
+            .Include(c => c.Replies)
+            .FirstOrDefaultAsync(c => c.Id == id);
+        if (comment != null)
+        {
+            context.Comments.Remove(comment);
+            await context.SaveChangesAsync();
+        }
+
+
+    }
+
+    public async Task DeleteReply(int id)
+    {
+        var reply = await context.Replies.FindAsync(id);
+
+        if (reply != null)
+        {
+            context.Replies.Remove(reply);
+            await context.SaveChangesAsync();
+        }
+
+
     }
 }

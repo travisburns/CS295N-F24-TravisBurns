@@ -11,6 +11,9 @@ public interface IBlogRepository
 
     Task AddReply(Reply reply);
     Task<Comment?> GetCommentById(int id);
+
+    Task DeleteComment(int id);
+    Task DeleteReply(int id);
 }
 
 
