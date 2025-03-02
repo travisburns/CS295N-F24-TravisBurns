@@ -86,6 +86,12 @@ namespace AnimeInfo.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Blog model)
         {
+
+            if (!ModelState.IsValid)
+            { 
+                return View(model);
+            }
+
             // Get the AppUser object for the current user
             var user = await _userManager.GetUserAsync(User);
 
@@ -114,6 +120,13 @@ namespace AnimeInfo.Controllers
         [HttpPost]
         public async Task<IActionResult> AddReply(int commentId, string replyText)
         {
+
+            if (!ModelState.IsValid)
+            {
+                var comment = await _repo.GetCommentById(commentId);
+                return RedirectToAction("Details", new { id = comment?.BlogId ?? 0 });
+            }
+
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(User);
@@ -144,6 +157,13 @@ namespace AnimeInfo.Controllers
         [HttpPost]
         public async Task<IActionResult> AddComment(int blogId, string commentText)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Details", new { id = blogId });
+            }
+
+
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(User);

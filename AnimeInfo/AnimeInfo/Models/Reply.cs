@@ -6,6 +6,9 @@ namespace AnimeInfo.Models
     {
         [Key]
         public int ReplyId { get; set; }
+
+        [Required(ErrorMessage = "Reply text is required")]
+        [StringLength(500, MinimumLength = 2, ErrorMessage = "Reply must be between 2 and 500 characters")]
         public string ReplyText { get; set; } = string.Empty;
         public DateTime ReplyDate { get; set; }
         public AppUser ReplyAuthor { get; set; } = null!;
