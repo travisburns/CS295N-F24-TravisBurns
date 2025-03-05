@@ -1,0 +1,76 @@
+﻿@model Blog
+
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title">@Model.BlogTitle</h2>
+            <h6 class="card-subtitle mb-2 text-muted">
+                By @Model.BlogAuthor.Name on @Model.BlogDate.ToString("MMMM dd, yyyy")
+            </h6>
+            <p class="card-text">@Model.BlogText</p>
+
+         
+            <div class="comments-section mt-4">
+                <h4>Comments</h4>
+                @foreach (var comment in Model.Comments)
+                {
+                    <div class="comment border-top pt-3 mb-3">
+                        <p>@comment.CommentText</p>
+                        <small class="text-muted">
+                            Posted by @comment.CommentAuthor.Name on @comment.CommentDate.ToString("MMMM dd, yyyy")
+                        </small>
+
+                       
+                        <div class="replies-section ml-4 mt-2">
+                            @foreach (var reply in comment.Replies)
+                            {
+                                <div class="reply border-left pl-3 mt-2">
+                                    <p>@reply.ReplyText</p>
+                                    <small class="text-muted">
+                                        Reply by @reply.ReplyAuthor.Name on @reply.ReplyDate.ToString("MMMM dd, yyyy")
+                                    </small>
+
+                                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.Identity.Name == reply.ReplyAuthor.UserName))
+                                    {
+                                        <form asp-action="DeleteReply" method="post" class="d-inline mt-1">
+                                            <input type="hidden" name="id" value="@reply.ReplyId" />
+                                            <input type="hidden" name="commentId" value="@comment.Id" />
+                                            <button type="submit" class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Delete this reply?');">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            }
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <form asp-action="AddReply" method="post" class="mt-2">
+                                    <input type="hidden" name="commentId" value="@comment.Id" />
+                                    <div class="input-group">
+                                        <input type="text" name="replyText" class="form-control" placeholder="Write a reply..." required />
+                                        <button type="submit" class="btn btn-secondary">Reply</button>
+                                    </div>
+                                </form>
+                            }
+                        </div>
+                       
+                    </div>
+                }
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <form asp-action="AddComment" method="post">
+                        <input type="hidden" name="blogId" value="@Model.BlogId" />
+                        <div class="form-group">
+                            <label>Add a Comment:</label>
+                            <textarea name="commentText" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,6 +3,7 @@ using System;
 using AnimeInfo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AnimeInfo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250113234605_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,6 +47,7 @@ namespace AnimeInfo.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("NormalizedEmail")
@@ -110,8 +113,7 @@ namespace AnimeInfo.Migrations
 
                     b.Property<string>("BlogTitle")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("BlogId");
 
@@ -137,8 +139,7 @@ namespace AnimeInfo.Migrations
 
                     b.Property<string>("CommentText")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("varchar(1000)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -147,35 +148,6 @@ namespace AnimeInfo.Migrations
                     b.HasIndex("CommentAuthorId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("AnimeInfo.Models.Reply", b =>
-                {
-                    b.Property<int>("ReplyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CommentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReplyAuthorId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime>("ReplyDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ReplyText")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
-                    b.HasKey("ReplyId");
-
-                    b.HasIndex("CommentId");
-
-                    b.HasIndex("ReplyAuthorId");
-
-                    b.ToTable("Replies");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -332,23 +304,6 @@ namespace AnimeInfo.Migrations
                     b.Navigation("CommentAuthor");
                 });
 
-            modelBuilder.Entity("AnimeInfo.Models.Reply", b =>
-                {
-                    b.HasOne("AnimeInfo.Models.Comment", "Comment")
-                        .WithMany("Replies")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AnimeInfo.Models.AppUser", "ReplyAuthor")
-                        .WithMany()
-                        .HasForeignKey("ReplyAuthorId");
-
-                    b.Navigation("Comment");
-
-                    b.Navigation("ReplyAuthor");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -403,11 +358,6 @@ namespace AnimeInfo.Migrations
             modelBuilder.Entity("AnimeInfo.Models.Blog", b =>
                 {
                     b.Navigation("Comments");
-                });
-
-            modelBuilder.Entity("AnimeInfo.Models.Comment", b =>
-                {
-                    b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618
         }

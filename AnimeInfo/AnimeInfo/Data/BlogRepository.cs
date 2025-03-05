@@ -1,6 +1,7 @@
 ﻿using AnimeInfo.Data;
 using AnimeInfo.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 public class BlogRepository : IBlogRepository
 {
@@ -8,6 +9,12 @@ public class BlogRepository : IBlogRepository
     public BlogRepository(ApplicationDbContext appDbContext)
     {
         context = appDbContext;
+    }
+
+    public async Task AddComment(Comment comment)
+    {
+        context.Comments.Add(comment);
+        await context.SaveChangesAsync();
     }
 
     public IQueryable<Blog> Blogs
@@ -21,45 +28,94 @@ public class BlogRepository : IBlogRepository
         }
     }
 
-    public List<Blog> GetReviews()
+    public async Task<List<Blog>> GetReviews()
     {
-        return context.Blogs
+        return await context.Blogs
             .Include(blog => blog.BlogAuthor)
             .Include(blog => blog.Comments)
                 .ThenInclude(comment => comment.CommentAuthor)
-            .ToList();
+            .ToListAsync();
     }
 
-    public List<Blog> GetBlogs()
+    public async Task<List<Blog>> GetBlogs()
     {
-        return context.Blogs
+        return await context.Blogs
             .Include(blog => blog.BlogAuthor)
             .Include(blog => blog.Comments)
                 .ThenInclude(comment => comment.CommentAuthor)
-            .ToList();
+                 .Include(blog => blog.Comments)
+            .ThenInclude(comment => comment.Replies)
+                .ThenInclude(reply => reply.ReplyAuthor)
+            .ToListAsync();
     }
 
-    public Blog GetBlogById(int id)
+    public async Task<Blog?> GetBlogById(int id)
     {
-        return context.Blogs
+        return await context.Blogs
             .Include(blog => blog.BlogAuthor)
             .Include(blog => blog.Comments)
                 .ThenInclude(comment => comment.CommentAuthor)
-            .Where(blog => blog.Id == id)
-            .SingleOrDefault();
+                .Include(blog => blog.Comments)
+                 .ThenInclude(comment => comment.Replies)
+                .ThenInclude(reply => reply.ReplyAuthor)
+            .Where(blog => blog.BlogId == id)
+            .SingleOrDefaultAsync();
     }
 
-    public int StoreReview(Blog model)
+    public async Task<int> StoreReview(Blog model)
     {
         model.BlogDate = DateTime.Now;
         context.Blogs.Add(model);
-        return context.SaveChanges();
+        return await context.SaveChangesAsync();
     }
 
-    public void StoreBlog(Blog model)
+    public async Task StoreBlog(Blog model)
     {
         model.BlogDate = DateTime.Now;
         context.Blogs.Add(model);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
+    }
+
+    public async Task AddReply(Reply reply)
+    {
+        context.Replies.Add(reply);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<Comment?> GetCommentById(int id)
+    {
+        return await context.Comments
+            .Include(c => c.CommentAuthor)
+            .Include(c => c.Blog)
+            .Include(c => c.Replies)
+                .ThenInclude(r => r.ReplyAuthor)
+            .FirstOrDefaultAsync(c => c.Id == id);
+    }
+
+    public async Task DeleteComment(int id)
+    {
+        var comment = await context.Comments
+            .Include(c => c.Replies)
+            .FirstOrDefaultAsync(c => c.Id == id);
+        if (comment != null)
+        {
+            context.Comments.Remove(comment);
+            await context.SaveChangesAsync();
+        }
+
+
+    }
+
+    public async Task DeleteReply(int id)
+    {
+        var reply = await context.Replies.FindAsync(id);
+
+        if (reply != null)
+        {
+            context.Replies.Remove(reply);
+            await context.SaveChangesAsync();
+        }
+
+
     }
 }

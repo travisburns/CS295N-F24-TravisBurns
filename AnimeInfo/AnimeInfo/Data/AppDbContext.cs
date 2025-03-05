@@ -1,27 +1,32 @@
 ﻿using AnimeInfo.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace AnimeInfo.Data
 {
-    public class ApplicationDbContext : DbContext
-
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
 
-        // constructor just calls the base class constructor
-
-        public ApplicationDbContext(
-
-           DbContextOptions<ApplicationDbContext> options) : base(options) { }
-
-
-
-        // one DbSet for each domain model class//
-
-        public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Blog> Blogs { get; set; }
-        public object Reviews { get; internal set; }
-
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Reply> Replies { get; set; } 
+
+       
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+         
+            modelBuilder.Entity<Reply>()
+                .HasOne(r => r.Comment)
+                .WithMany(c => c.Replies)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }
 
